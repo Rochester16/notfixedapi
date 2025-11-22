@@ -12,16 +12,29 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const res = await API.post("/auth/login", formData);
 
-            // 🔥 IMPORTANT — Store data cleanly
-            localStorage.setItem("token", res.data.token);       // <-- used by Axios
-            localStorage.setItem("user", JSON.stringify(res.data)); // <-- also used
+            // FIRST API FORMAT:
+            // { message, token, email, name, role }
+            const { token, name, email, role } = res.data;
 
+            if (!token || !email) {
+                throw new Error("Missing login data from server");
+            }
+
+            // Save to localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem(
+                "user",
+                JSON.stringify({ name, email, role })
+            );
+
+            // Redirect → ALWAYS go to home (your request)
             navigate("/home");
         } catch (err) {
-            alert(err?.response?.data?.message || "Login failed");
+            alert(err.response?.data?.message || "Login failed");
         }
     };
 
@@ -38,6 +51,7 @@ const LoginPage = () => {
                         name="email"
                         placeholder="Email Address"
                         onChange={handleChange}
+                        required
                     />
 
                     <input
@@ -45,6 +59,7 @@ const LoginPage = () => {
                         name="password"
                         placeholder="Password"
                         onChange={handleChange}
+                        required
                     />
 
                     <button type="submit" className="auth-btn">

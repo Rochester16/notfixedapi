@@ -25,7 +25,7 @@ export default function AdminNavbar() {
       <div className="admin-nav-right">
         {user ? (
           <>
-            <Link to="/admin" className={`admin-link ${isActive("/admin") ? "active" : ""}`}>
+            <Link to="/admin/dashboard" className={`admin-link ${isActive("/admin") ? "active" : ""}`}>
               Dashboard
             </Link>
             <Link
@@ -41,7 +41,7 @@ export default function AdminNavbar() {
               Add Product
             </Link>
             <Link
-              to="/admin/history"
+              to="/admin/products/history"
               className={`admin-link ${isActive("/admin/history") ? "active" : ""}`}
             >
               History

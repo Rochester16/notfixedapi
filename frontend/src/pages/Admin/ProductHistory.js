@@ -1,13 +1,15 @@
 // src/pages/ProductHistory.js
 import React, { useEffect, useState } from "react";
 import API from "../../api.js";
-
+import Navbar from "../../components/Navbar";
 
 export default function ProductHistory() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => loadLogs(), []);
+  useEffect(() => {
+    loadLogs();
+  }, []);
 
   async function loadLogs() {
     try {
@@ -22,70 +24,62 @@ export default function ProductHistory() {
   }
 
   if (loading) {
-    return React.createElement(
-      "section",
-      { className: "card panel" },
-      React.createElement("h2", null, "Product History"),
-      React.createElement("p", null, "Loading history...")
+    return (
+      <>
+        <Navbar />
+        <section className="card panel">
+          <h2>Product History</h2>
+          <p>Loading history...</p>
+        </section>
+      </>
     );
   }
 
   if (logs.length === 0) {
-    return React.createElement(
-      "section",
-      { className: "card panel" },
-      React.createElement("h2", null, "Product History"),
-      React.createElement("p", null, "No product history found.")
+    return (
+      <>
+        <Navbar />
+        <section className="card panel">
+          <h2>Product History</h2>
+          <p>No product history found.</p>
+        </section>
+      </>
     );
   }
 
-  return React.createElement(
-    "section",
-    { className: "card panel" },
-    React.createElement("h2", null, "Product History"),
+  return (
+    <>
+      <Navbar />
 
-    // TABLE
-    React.createElement(
-      "table",
-      { className: "history-table" },
+      <section className="card panel">
+        <h2>Product History</h2>
 
-      // HEAD
-      React.createElement(
-        "thead",
-        null,
-        React.createElement(
-          "tr",
-          null,
-          React.createElement("th", null, "Admin"),
-          React.createElement("th", null, "Product"),
-          React.createElement("th", null, "Action"),
-          React.createElement("th", null, "Description"),
-          React.createElement("th", null, "Date")
-        )
-      ),
+        <table className="history-table">
+          <thead>
+            <tr>
+              <th>Admin</th>
+              <th>Product</th>
+              <th>Action</th>
+              <th>Description</th>
+              <th>Date</th>
+            </tr>
+          </thead>
 
-      // BODY
-      React.createElement(
-        "tbody",
-        null,
-        logs.map((log) =>
-          React.createElement(
-            "tr",
-            { key: log._id },
-
-            React.createElement("td", null, log.admin || log.adminId?.email || "Unknown"),
-            React.createElement("td", null, log.productName || log.productId?.name || "—"),
-            React.createElement("td", null, log.action || "—"),
-            React.createElement("td", null, log.details || log.description || "—"),
-
-            React.createElement(
-              "td",
-              null,
-              new Date(log.createdAt || log.date).toLocaleString()
-            )
-          )
-        )
-      )
-    )
+          <tbody>
+            {logs.map((log) => (
+              <tr key={log._id}>
+                <td>{log.admin || log.adminId?.email || "Unknown"}</td>
+                <td>{log.productName || log.productId?.name || "—"}</td>
+                <td>{log.action || "—"}</td>
+                <td>{log.details || log.description || "—"}</td>
+                <td>
+                  {new Date(log.createdAt || log.date).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </>
   );
 }

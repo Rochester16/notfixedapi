@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import API from "../../api";
 import { Link } from "react-router-dom";
 import "../../components/Admin.css";
+import Navbar from "../../components/Navbar";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -45,154 +46,117 @@ export default function ProductsPage() {
     }
   }
 
-  // PAGE UI
-  return React.createElement(
-    "section",
-    { className: "card panel" },
+  return (
+    <>
+      <Navbar />
 
-    // HEADER
-    React.createElement(
-      "div",
-      { className: "panel-header" },
-      React.createElement("h2", null, "Product Inventory")
-    ),
+      <section className="card panel">
+        {/* HEADER */}
+        <div className="panel-header">
+          <h2>Product Inventory</h2>
+        </div>
 
-    // FILTERS
-    React.createElement(
-      "div",
-      { className: "panel-body filter-row" },
+        {/* FILTERS */}
+        <div className="panel-body filter-row">
+          <input
+            className="search-input"
+            placeholder="Search product name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-      // SEARCH
-      React.createElement("input", {
-        className: "search-input",
-        placeholder: "Search product name...",
-        value: search,
-        onChange: (e) => setSearch(e.target.value),
-      }),
+          <input
+            className="search-input"
+            placeholder="Filter by category..."
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
 
-      // CATEGORY
-      React.createElement("input", {
-        className: "search-input",
-        placeholder: "Filter by category...",
-        value: category,
-        onChange: (e) => setCategory(e.target.value),
-      }),
+          <Link to="/admin/products/add" className="btn-primary">
+            + Add Product
+          </Link>
+        </div>
 
-      // ADD PRODUCT LINK
-      React.createElement(
-        Link,
-        { to: "/admin/products/add", className: "btn-primary" },
-        "+ Add Product"
-      )
-    ),
+        {/* TABLE */}
+        {loading ? (
+          <p>Loading products...</p>
+        ) : products.length === 0 ? (
+          <p>No products found.</p>
+        ) : (
+          <table className="inventory-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-    // LIST / TABLE
-    loading
-      ? React.createElement("p", null, "Loading products...")
-      : products.length === 0
-      ? React.createElement("p", null, "No products found.")
-      : React.createElement(
-          "table",
-          { className: "inventory-table" },
-          React.createElement(
-            "thead",
-            null,
-            React.createElement(
-              "tr",
-              null,
-              React.createElement("th", null, "Image"),
-              React.createElement("th", null, "Name"),
-              React.createElement("th", null, "Category"),
-              React.createElement("th", null, "Price"),
-              React.createElement("th", null, "Stock"),
-              React.createElement("th", null, "Created"),
-              React.createElement("th", null, "Actions")
-            )
-          ),
-          React.createElement(
-            "tbody",
-            null,
-            products.map((p) =>
-              React.createElement(
-                "tr",
-                { key: p._id },
+            <tbody>
+              {products.map((p) => (
+                <tr key={p._id}>
+                  <td>
+                    {p.image ? (
+                      <img
+                        src={`http://localhost:5000/uploads/${p.image}`}
+                        alt={p.name}
+                        className="thumb-img"
+                      />
+                    ) : (
+                      "No Image"
+                    )}
+                  </td>
 
-                // PRODUCT IMAGE
-                React.createElement(
-                  "td",
-                  null,
-                  p.image
-                    ? React.createElement("img", {
-                        src: `http://localhost:5000/uploads/${p.image}`,
-                        alt: p.name,
-                        className: "thumb-img",
-                      })
-                    : "No Image"
-                ),
+                  <td>{p.name}</td>
+                  <td>{p.category || "-"}</td>
+                  <td>₱{p.price.toLocaleString("en-PH")}</td>
+                  <td>{p.stock}</td>
+                  <td>{new Date(p.createdAt).toLocaleDateString()}</td>
 
-                React.createElement("td", null, p.name),
-                React.createElement("td", null, p.category || "-"),
-                React.createElement(
-                  "td",
-                  null,
-                  "₱" + p.price.toLocaleString("en-PH")
-                ),
-                React.createElement("td", null, p.stock),
-                React.createElement(
-                  "td",
-                  null,
-                  new Date(p.createdAt).toLocaleDateString()
-                ),
+                  <td className="actions-col">
+                    <Link
+                      to={`/admin/products/edit/${p._id}`}
+                      className="btn-small"
+                    >
+                      Edit
+                    </Link>
 
-                // ACTIONS
-                React.createElement(
-                  "td",
-                  { className: "actions-col" },
+                    <button
+                      className="btn-small btn-danger"
+                      onClick={() => deleteProduct(p._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
-                  // EDIT
-                  React.createElement(
-                    Link,
-                    { to: `/admin/products/edit/${p._id}`, className: "btn-small" },
-                    "Edit"
-                  ),
+        {/* PAGINATION */}
+        <div className="pagination">
+          <button
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Prev
+          </button>
 
-                  // DELETE
-                  React.createElement(
-                    "button",
-                    {
-                      className: "btn-small btn-danger",
-                      onClick: () => deleteProduct(p._id),
-                    },
-                    "Delete"
-                  )
-                )
-              )
-            )
-          )
-        ),
+          <span>Page {page} of {totalPages}</span>
 
-    // PAGINATION
-    React.createElement(
-      "div",
-      { className: "pagination" },
-
-      React.createElement(
-        "button",
-        { disabled: page <= 1, onClick: () => setPage((p) => p - 1) },
-        "Prev"
-      ),
-
-      React.createElement(
-        "span",
-        null,
-        `Page ${page} of ${totalPages}`
-      ),
-
-      React.createElement(
-        "button",
-        { disabled: page >= totalPages, onClick: () => setPage((p) => p + 1) },
-        "Next"
-      )
-    )
+          <button
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      </section>
+    </>
   );
 }

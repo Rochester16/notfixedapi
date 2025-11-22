@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import API from "../../api";
 import "../../components/Admin.css";
-
+import Navbar from "../../components/Navbar";
 export default function AddProductPage() {
   const [form, setForm] = useState({
     name: "",
@@ -39,8 +39,10 @@ export default function AddProductPage() {
       alert("Failed to add product");
     }
   };
-
+ 
   return (
+    <>
+     <Navbar />
     <div className="admin-container">
       <h2>Add Product</h2>
 
@@ -56,5 +58,6 @@ export default function AddProductPage() {
         <button type="submit">Add Product</button>
       </form>
     </div>
+    </>
   );
 }

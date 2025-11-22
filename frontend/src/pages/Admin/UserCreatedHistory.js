@@ -1,7 +1,7 @@
 // src/pages/UserCreatedHistory.js
 import React, { useEffect, useState } from "react";
 import API, { apiPost } from "../../api.js";
-
+import Navbar from "../../components/Navbar";
 
 
 
