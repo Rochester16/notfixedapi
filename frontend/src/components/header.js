@@ -1,9 +1,8 @@
-// src/components/Navbar.js
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/AdminNavbar.css";
+import "../styles/UserNavbar.css";
 
-export default function Navbar() {
+export default function UserNavbar() {
   const navigate = useNavigate();
 
   const logout = () => {
@@ -12,20 +11,26 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="admin-navbar">
-      <h2 className="admin-logo">AUREVRA Admin</h2>
+    <nav className="nav-container">
+      <div className="nav-left">
+        <img src="/jewelry/logo.png" className="nav-logo" alt="logo" />
+        <h1 className="nav-title">AUREVRA JEWELRY</h1>
+      </div>
 
-      <ul className="admin-nav-links">
-        <li><Link to="/admin/dashboard">Dashboard</Link></li>
-        <li><Link to="/admin/products">Products</Link></li>
-        <li><Link to="/admin/products/history">Product History</Link></li>
-        <li><Link to="/admin/purchases">Purchases</Link></li>
-        <li><Link to="/admin/users">User Accounts</Link></li>
+      <ul className="nav-links">
+        <li><Link to="/user/home">Home</Link></li>
+        <li><Link to="/user/products">Shop</Link></li>
+        <li><Link to="/user/search">Search</Link></li>
+        <li><Link to="/user/wishlist">Wishlist</Link></li>
+        <li><Link to="/user/contact">Contact Us</Link></li>
       </ul>
 
-      <button className="admin-logout-btn" onClick={logout}>
-        Logout
-      </button>
+      <div className="nav-right">
+        <img src="/jewelry/cart.png" className="nav-icon" alt="cart" />
+        <img src="/jewelry/user.png" className="nav-icon" alt="profile" />
+
+        <button className="logout-btn" onClick={logout}>Logout</button>
+      </div>
     </nav>
   );
 }

@@ -11,6 +11,13 @@
     top: 0;
     z-index: 100;
   }
+  .history-img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+  }
   
   .admin-nav-left {
     display: flex;

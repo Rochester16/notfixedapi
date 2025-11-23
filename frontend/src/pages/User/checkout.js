@@ -7,7 +7,7 @@ export default function Checkout() {
     "div",
     { className: "checkout-page" },
 
-    React.createElement(Header, null),
+   
 
     React.createElement(
       "section",

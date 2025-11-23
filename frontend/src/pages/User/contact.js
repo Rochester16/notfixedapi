@@ -7,8 +7,7 @@ export default function Contact() {
     "div",
     { className: "contact-page" },
 
-    React.createElement(Header, null),
-
+    
     React.createElement(
       "section",
       { className: "contact-container" },

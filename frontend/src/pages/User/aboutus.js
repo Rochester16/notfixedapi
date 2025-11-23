@@ -1,14 +1,10 @@
 import React from "react";
-import Header from "../../components/header";
 import Footer from "../../components/footer";
 
 export default function AboutUs() {
     return React.createElement(
         "div",
         { className: "about-page-container" },
-
-        // HEADER
-        React.createElement(Header, null),
 
         // ABOUT SECTION
         React.createElement(

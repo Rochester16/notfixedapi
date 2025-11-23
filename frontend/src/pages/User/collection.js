@@ -13,7 +13,6 @@ export default function Collection() {
     "div",
     { className: "collection-page" },
 
-    React.createElement(Header, null),
 
     React.createElement(
       "section",
