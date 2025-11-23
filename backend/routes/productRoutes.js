@@ -61,5 +61,22 @@ router.delete(
   adminOnly,
   deleteProduct
 );
+// GET /api/products/search?q=keyword
+router.get("/search", async (req, res) => {
+  try {
+    const keyword = req.query.q || "";
+    const products = await getProducts(); // getProducts should return all products
+
+    // Filter by name (case-insensitive)
+    const results = products.filter((p) =>
+      p.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    res.json(results.slice(0, 10)); // limit to 10 results
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;
