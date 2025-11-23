@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../../api";
 import "../../styles/Auth.css";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
+    const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) =>
@@ -12,46 +15,80 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setLoading(true);
 
         try {
             const res = await API.post("/auth/login", formData);
 
-            // FIRST API FORMAT:
-            // { message, token, email, name, role }
+            // Get response data
             const { token, name, email, role } = res.data;
 
             if (!token || !email) {
                 throw new Error("Missing login data from server");
             }
 
-            // Save to localStorage
+            // Save to localStorage (always use localStorage for now)
             localStorage.setItem("token", token);
-            localStorage.setItem(
-                "user",
-                JSON.stringify({ name, email, role })
-            );
+            localStorage.setItem("user", JSON.stringify({ name, email, role }));
 
-            // Redirect → ALWAYS go to home (your request)
-            navigate("/home");
+            // Show success message
+            console.log("Login successful!");
+
+            // Navigate based on user role or default to home
+            // Change these routes to match YOUR App.js routes!
+            if (role === "admin") {
+                navigate("/admin/dashboard"); // Admin dashboard
+            } else {
+                // For regular users - UPDATE THIS PATH!
+                // Options:
+                // navigate("/shop");     // Go to shop page
+                // navigate("/home");     // Go to home page  
+                // navigate("/dashboard"); // Go to dashboard
+                // window.location.href = "/"; // Force full page reload
+                
+                navigate("/home"); // ← CHANGE THIS TO YOUR DESIRED PAGE
+            }
+
         } catch (err) {
-            alert(err.response?.data?.message || "Login failed");
+            console.error("Login error:", err);
+            const errorMessage = err.response?.data?.message || "Login failed";
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="auth-container">
-            <img className="auth-logo" src="/jewelry/logo.png" alt="logo" />
-
-            <h2>LOGIN</h2>
+            <div className="logo-section">
+                <img className="auth-logo" src="/jewelry/logo.png" alt="logo" />
+                <h1 className="brand-name">AUREVRA</h1>
+                <p className="brand-subtitle">JEWELRY</p>
+            </div>
 
             <div className="auth-box">
+                <div className="auth-header">
+                    <div className="header-accent"></div>
+                    <h2>LOGIN</h2>
+                </div>
+
                 <form onSubmit={handleSubmit}>
+                    {error && (
+                        <div className="auth-message error">
+                            <i className="fas fa-exclamation-circle"></i>
+                            {error}
+                        </div>
+                    )}
+
                     <input
                         type="email"
                         name="email"
                         placeholder="Email Address"
                         onChange={handleChange}
+                        value={formData.email}
                         required
+                        disabled={loading}
                     />
 
                     <input
@@ -59,17 +96,34 @@ const LoginPage = () => {
                         name="password"
                         placeholder="Password"
                         onChange={handleChange}
+                        value={formData.password}
                         required
+                        disabled={loading}
                     />
 
-                    <button type="submit" className="auth-btn">
-                        LOG IN
+                    <div className="form-options">
+                        <label className="remember-me">
+                            <input
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                            />
+                            <span>Remember Me</span>
+                        </label>
+
+                        <Link to="/user/forgot-password" className="forgot-password-link">
+                            Forgot Password?
+                        </Link>
+                    </div>
+
+                    <button type="submit" className="auth-btn" disabled={loading}>
+                        {loading ? "LOGGING IN..." : "LOG IN"}
                     </button>
                 </form>
 
                 <div className="auth-footer">
-                    Don’t have an account?
-                    <a href="/user/register">Sign Up</a>
+                    <span>Don't have an Account?</span>
+                    <Link to="/user/register">Sign Up</Link>
                 </div>
             </div>
         </div>

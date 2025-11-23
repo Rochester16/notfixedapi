@@ -65,18 +65,15 @@ router.delete(
 router.get("/search", async (req, res) => {
   try {
     const keyword = req.query.q || "";
-    const products = await getProducts(); // getProducts should return all products
 
-    // Filter by name (case-insensitive)
-    const results = products.filter((p) =>
-      p.name.toLowerCase().includes(keyword.toLowerCase())
-    );
+    const results = await Product.find({
+      name: { $regex: keyword, $options: "i" } // case-insensitive
+    }).limit(10);
 
-    res.json(results.slice(0, 10)); // limit to 10 results
+    res.json(results);
   } catch (err) {
-    console.error(err);
+    console.error("Search error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 export default router;

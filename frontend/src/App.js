@@ -1,4 +1,3 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 
@@ -6,7 +5,11 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-route
 import LoginPage from "./pages/User/LoginPage";
 import RegisterPage from "./pages/User/RegisterPage";
 import HomePage from "./pages/User/HomePage";
-
+import ForgotPasswordPage from "./pages/User/ForgotPassword";
+import ShopPage from "./pages/User/shop";
+import Cart from "./pages/User/cart";
+import Wishlist from "./pages/User/Wishlist";
+import AboutUs from "./pages/User/aboutus";
 // ADMIN PAGES
 import AddProductPage from "./pages/Admin/AddProductPage";
 import DashboardPage from "./pages/Admin/DashboardPage";
@@ -14,6 +17,9 @@ import ProductHistory from "./pages/Admin/ProductHistory";
 import ProductsPage from "./pages/Admin/ProductsPage";
 import PurchaseHistory from "./pages/Admin/PurchaseHistory";
 import UserCreatedHistory from "./pages/Admin/UserCreatedHistory";
+
+// LAYOUTS
+import UserLayout from "./components/userNavBar";
 
 // =============================================================
 // Helper to read logged in user
@@ -59,81 +65,109 @@ function AdminRoute({ children }) {
 
 // =============================================================
 // MAIN LAYOUT
-// NOTE: Header (navbar) intentionally NOT rendered here because
-// pages themselves include the header to avoid duplication.
 // =============================================================
 function Layout() {
-  const location = useLocation();
-
   return (
-    <>
-      <Routes>
-        {/* LOGIN / REGISTER */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/user/login" element={<LoginPage />} />
-        <Route path="/user/register" element={<RegisterPage />} />
-
-        {/* USER HOME */}
-        <Route
-          path="/home"
-          element={
-            <UserRoute>
+    <Routes>
+      {/* LOGIN / REGISTER */}
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/user/login" element={<LoginPage />} />
+      <Route path="/user/register" element={<RegisterPage />} />
+      <Route path="/user/forgot-password" element={<ForgotPasswordPage />} />
+      {/* USER ROUTES */}
+      <Route
+        path="/home"
+        element={
+          <UserRoute>
+            <UserLayout>
               <HomePage />
-            </UserRoute>
-          }
-        />
+            </UserLayout>
+          </UserRoute>
+        }
+      />
+     
+      <Route
+        path="/shop"
+        element={
+          <UserRoute>
+            <UserLayout>
+              <ShopPage />
+            </UserLayout>
+          </UserRoute>
+        }
+      />
+<Route
+  path="/cart"
+  element={
+    <UserRoute>
+      <UserLayout>
+        <Cart />
+      </UserLayout>
+    </UserRoute>
+  }
+/>
 
-        {/* ADMIN ROUTES */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <AdminRoute>
-              <DashboardPage />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/products"
-          element={
-            <AdminRoute>
-              <ProductsPage />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/products/history"
-          element={
-            <AdminRoute>
-              <ProductHistory />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/products/add"
-          element={
-            <AdminRoute>
-              <AddProductPage />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/purchases"
-          element={
-            <AdminRoute>
-              <PurchaseHistory />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <AdminRoute>
-              <UserCreatedHistory />
-            </AdminRoute>
-          }
-        />
-      </Routes>
-    </>
+<Route
+  path="/wishlist"
+  element={
+    <UserRoute>
+      <UserLayout>
+        <Wishlist />
+      </UserLayout>
+    </UserRoute>
+  }
+/>
+
+      {/* ADMIN ROUTES */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <AdminRoute>
+            <DashboardPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/products"
+        element={
+          <AdminRoute>
+            <ProductsPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/products/history"
+        element={
+          <AdminRoute>
+            <ProductHistory />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/products/add"
+        element={
+          <AdminRoute>
+            <AddProductPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/purchases"
+        element={
+          <AdminRoute>
+            <PurchaseHistory />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <AdminRoute>
+            <UserCreatedHistory />
+          </AdminRoute>
+        }
+      />
+    </Routes>
   );
 }
 

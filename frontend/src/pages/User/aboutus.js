@@ -1,55 +1,23 @@
-import React from "react";
-import Footer from "../../components/footer";
+import React from 'react';
 
-export default function AboutUs() {
-    return React.createElement(
-        "div",
-        { className: "about-page-container" },
+const AboutUs = () => {
+  return (
+    <div className="main-content">
+      <div className="about-section">
+        <div className="about-content">
+          <h2 className="section-title">OUR STORY & CRAFT</h2> {/* Adjusted from about-content h2 */}
+          <p>
+            Our story began with a simple dedication: to move beyond fleeting trends and create jewelry with enduring significance. This commitment is woven into every design. We honor the meticulous process of master craftsmanship, utilizing expert hands and premium materials to ensure that each piece not only beautifully reflects the unique spirit of the wearer, but is also built to be cherished for generations.
+          </p>
+        </div>
+        <div className="about-image">
+          {/*  */}
+          <img src="path/to/craft-image.jpg" alt="Jewelers crafting jewelry" />
+        </div>
+      </div>
+      {/* Assuming the footer section (dark brown with contact info) is rendered by Footer.js */}
+    </div>
+  );
+};
 
-        // ABOUT SECTION
-        React.createElement(
-            "section",
-            { className: "about-section" },
-
-            // LEFT CONTENT
-            React.createElement(
-                "div",
-                { className: "about-content" },
-                React.createElement("h2", null, "Our Story"),
-                React.createElement(
-                    "p",
-                    null,
-                    "Aurevra Jewelry is a timeless collection crafted for those who find beauty in elegance and meaning in every detail. Inspired by classic sophistication and modern artistry, each piece in our collection is designed to capture individuality and confidence."
-                ),
-                React.createElement(
-                    "p",
-                    null,
-                    "Founded in 2025, Aurevra Jewelry was born from a passion for creativity and craftsmanship. Our goal is to offer jewelry that transcends trends — pieces that become part of your story, symbolizing milestones, love, and legacy."
-                ),
-                React.createElement(
-                    "p",
-                    null,
-                    "From design to delivery, every creation is carefully handcrafted using premium materials to ensure both durability and allure. We believe jewelry is not just an accessory — it’s a reflection of who you are."
-                ),
-                React.createElement(
-                    "p",
-                    null,
-                    "Whether you’re celebrating life’s grandest moments or everyday victories, Aurevra Jewelry helps you shine with confidence, grace, and authenticity."
-                )
-            ),
-
-            // RIGHT IMAGE
-            React.createElement(
-                "div",
-                { className: "about-image" },
-                React.createElement("img", {
-                    src: "/jewelry/aboutus.png",
-                    alt: "Aurevra Jewelry Workshop"
-                })
-            )
-        ),
-
-        // FOOTER
-        React.createElement(Footer, null)
-    );
-}
+export default AboutUs;
